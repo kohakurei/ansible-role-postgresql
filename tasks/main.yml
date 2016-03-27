@@ -1,0 +1,63 @@
+---
+- name: Added postgresql repository
+  template:
+    src: pgdg.list.j2
+    dest: /etc/apt/sources.list.d/pgdg.list
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Register the apt-key for PostgreSQL repository.
+  apt_key:
+    url: "{{ postgresql_repository_key }}"
+    state: present
+
+- name: Ensure postgresql packages.
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+  with_items: "{{ postgresql_packages }}"
+
+- name: Ensure postgis packages.
+  apt:
+    name: postgresql-{{ postgresql_version }}-postgis-{{ postgis_version }}
+  when:
+    - postgis_version is defined
+
+# create user
+- name: Create postgresql user.
+  become: true
+  become_user: "{{ postgresql_superuser_name }}"
+  postgresql_user:
+    name: "{{ postgresql_user_name }}"
+    password: "{{ postgresql_user_password }}"
+    role_attr_flags: "{{ postgresql_user_roles }}"
+    encrypted: yes
+    state: present
+  when:
+    - postgresql_user_name is defined
+    - postgresql_user_password is defined
+
+# create database
+- name: Create database.
+  become: true
+  become_user: "{{ postgresql_superuser_name }}"
+  postgresql_db:
+    name: "{{ postgresql_db_name }}"
+    encoding: "{{ postgresql_db_encoding }}"
+    owner: "{{ postgresql_user_name }}"
+  when:
+    - postgresql_db_name is defined
+
+- name: Configure connection rules for user.
+  template:
+    src: pg_hba.conf.j2
+    dest: /etc/postgresql/{{ postgresql_version }}/main/pg_hba.conf
+    owner: postgres
+    group: postgres
+    mode: 0640
+
+- name: Restart postgresql server.
+  service:
+    name: postgresql
+    state: restarted

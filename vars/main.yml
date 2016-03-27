@@ -1,0 +1,4 @@
+postgresql_packages:
+  - python-psycopg2
+  - postgresql-{{ postgresql_version }}
+  - postgresql-contrib-{{ postgresql_version }}
