@@ -16,3 +16,13 @@ postgresql_packages:
   - postgresql-{{ postgresql_version }}
   - postgresql-contrib-{{ postgresql_version }}
   - postgresql-server-dev-{{ postgresql_version }}
+
+# if create user & database with deploy when remove comment out.
+#postgresql_user_name: "ckan_default"
+#postgresql_user_password: "ckan_default"
+
+#if create database with delopy
+#postgresql_db_name: "ckan_default"
+
+# if install postgis with postgresql when remove comment out.
+# postgis_version: "2.2"
