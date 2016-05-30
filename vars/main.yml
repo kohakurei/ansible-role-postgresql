@@ -1,4 +1,1 @@
-postgresql_packages:
-  - python-psycopg2
-  - postgresql-{{ postgresql_version }}
-  - postgresql-contrib-{{ postgresql_version }}
+__postgresql_repository_key: "https://www.postgresql.org/media/keys/ACCC4CF8.asc"

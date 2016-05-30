@@ -1,5 +1,4 @@
 postgresql_version: "9.3"
-postgresql_repository_key: "https://www.postgresql.org/media/keys/ACCC4CF8.asc"
 
 postgresql_superuser_name: "postgres"
 
@@ -11,3 +10,9 @@ postgresql_user_connection:
   - name: "{{ postgresql_user_name }}"
     type: "local"
     database: "all"
+
+postgresql_packages:
+  - python-psycopg2
+  - postgresql-{{ postgresql_version }}
+  - postgresql-contrib-{{ postgresql_version }}
+  - postgresql-server-dev-{{ postgresql_version }}

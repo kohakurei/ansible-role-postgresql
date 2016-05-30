@@ -9,8 +9,13 @@
 
 - name: Register the apt-key for PostgreSQL repository.
   apt_key:
-    url: "{{ postgresql_repository_key }}"
+    url: "{{ __postgresql_repository_key }}"
     state: present
+    validate_certs: no
+
+- name: Package update
+  apt:
+    update_cache: yes
 
 - name: Ensure postgresql packages.
   apt:
