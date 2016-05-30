@@ -61,6 +61,8 @@
     owner: postgres
     group: postgres
     mode: 0640
+  when:
+    - postgresql_user_name is defined
 
 - name: Restart postgresql server.
   service:
